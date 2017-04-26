@@ -29,18 +29,23 @@ MySQL支持指定用户可登录IP和授予的具体访问权限。
 
 ```
 CREATE USER 'root'@'172.30.0.%' IDENTIFIED BY 'password';
-GRANT USAGE ON *.* TO 'root'@'172.30.0.%' IDENTIFIED BY 'password';
+GRANT all ON *.* TO 'root'@'172.30.0.%' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES; 
 ```
 
 ##### 6. 检查Ubuntu防火墙设置
 
 Ubuntu默认使用`ufw (Uncomplicated Firewall)`作为防火墙配置工具，且ufw处于禁用状态。如果您想不使用终端来设置防火墙，也可安装 `gufw`。
 
-如果防火墙已经启动需要添加规则，允许其他主机通过防火墙访问MySQL服务。
+Ubuntu防火墙默认不启动，如果不了解如何设置防火墙，那么可以保持防火墙禁用状态。
+
+如果需要启用防火墙并添加规则，那么必须设置允许其他主机通过防火墙访问MySQL服务。
 
 为方便起见，`ufw`中添加允许同一局域网内任意主机访问访问MySQL服务器任意服务规则。
+最为重要的是，当启用防火墙后，不要忘记添加允许任意主机通过SSH服务登录该服务器的防火墙规则，不然可能导致不能远程管理自己的云服务器。
 
 ```
+sudo ufw allow from any to any port 22
 sudo ufw allow from 172.30.0.0/24
 ```
 
