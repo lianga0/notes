@@ -79,6 +79,31 @@ windows平台输出结果：
 
 <img src="img/windows_output.png" alt="windows special character" />
 
+下面代码运行结果也可以证明上述猜测：
+```
+# coding:utf-8
+import sys
+print sys.maxunicode
+import json
+a=u"饜哀"
+print json.dumps({"1":a})
+x = a.encode('utf-8',errors='strict')
+print x
+```
+
+linux平台输出结果：
+```
+1114111
+{"1": "\ud803\udc27"}
+𐰧
+```
+
+windows平台输出结果：
+```
+65535
+{"1": "\ud803\udc27"}
+饜哀
+```
 
 ### 确定Windows XP到底是UCS-2的还是UTF-16的
 
