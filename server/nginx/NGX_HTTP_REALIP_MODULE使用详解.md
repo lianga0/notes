@@ -19,9 +19,27 @@ set_real_ip_from  10.10.10.10;
 real_ip_header    X-Forwarded-For;
 ```
 
-**set_real_ip_from指令是告诉nginx，10.10.10.10是我们的反代服务器（信任服务器，记住这个名词，下面会提到），不是真实的用户IP？？？，real_ip_header则是告诉nginx真正的用户IP是存在X-Forwarded-For请求头中。**
+**set_real_ip_from指令是告诉nginx，10.10.10.10是我们的反代服务器（信任服务器，记住这个名词，下面会提到），NGX_HTTP_REALIP_MODULE会信任该服务器发送的用户真实IP信息，real_ip_header则是告诉nginx真正的用户IP是存在X-Forwarded-For请求头中。**
 
 重新加载nginx配置之后，就可以看到nginx日志里记录的IP就是123.123.123.123了，php里的REMOTE_ADDR也是123.123.123.123。
+
+**其中，NGX_HTTP_REALIP_MODULE模块中通过set_real_ip_from指令设置的信任该服务器必须保证能够正确传递真实用户的IP信息，否则获取到的用户IP信息将可以被任意伪造**。例如，测试服务器IP为10.64.31.101，nginx的NGX_HTTP_REALIP_MODULE模块配置如下:
+
+```
+real_ip_header X-Forwarded-For;
+set_real_ip_from 10.64.0.0/16;
+```
+
+在两台电脑A(10.64.34.28)和B(10.206.132.10)上分别执行如下Python脚本：
+
+```
+import requests
+headers = {"X-Forwarded-For": "28.28.28.28"}
+r = requests.get("http://10.64.31.101/api/dr/1.0/getip",headers=headers)
+print r.text
+```
+
+此时，电脑A(10.64.34.28)通过Server API获取自己的真实IP为28.28.28.28，而电脑B(10.206.132.10)通过Server API获取自己的真实IP为10.206.132.10。
 
 realip模块还提供了另外一个指令real_ip_recursive，可以用来处理更加复杂的情况，架构如图：
 
