@@ -40,6 +40,21 @@ RewriteRule .* https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]
 </VirtualHost>
 ```
 
+或者可以写成如下形式（Dr.Cleaner）
+
+```
+<VirtualHost *:80>
+    RewriteEngine On
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^.*$ https://%{SERVER_NAME}%{REQUEST_URI}
+
+    <IfModule mod_setenvif.c>
+        SetEnvIf X-Forwarded-Proto "^https$" HTTPS
+    </IfModule>
+</VirtualHost>
+```
+
+
 ##### .htaccess 文件
 
 注意：不建议使用 .htaccess，而应仅在您没有主配置文件的访问权限时使用。
