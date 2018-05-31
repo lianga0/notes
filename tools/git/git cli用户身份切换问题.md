@@ -20,6 +20,8 @@ git config user.name userB
 git config user.email userB@gmail.com
 ```
 
+一般在Linux终端中，如果因为修改了用户密码，可以使用命令`git config --global --unset core.askpass`允许自己提交时输入新密码，但这条命令对于这种情况也不能起到帮助作用。
+
 最后，在一篇[GitHub changing user account on windows](https://nirklars.wordpress.com/tag/git-push-wrong-username/)文章中找到答案。
 原来git在windows 10上安装后，默认使用windows的“凭据管理器”来管理用户使用git时输入的用户名和密码凭据。
 
