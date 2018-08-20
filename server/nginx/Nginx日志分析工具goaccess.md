@@ -19,6 +19,13 @@ $ make
 
 > The only dependency is ncurses. If outputting real-time HTML, ensure port 7890 is opened. 
 
+> 2018.08.20 another dependency maybe required(Ubuntu 14.04LTS).
+Here are the dependencies needed to install and use GoAccess on your VPS. Acquire them using the apt-get package manager.
+
+```
+sudo apt-get install libncursesw5-dev libglib2.0-dev libgeoip-dev libtokyocabinet-dev
+```
+
 ##### 1.2 通过包管理器进行安装
 
 对于Debian/Ubuntu发行版，可以使用如下命令直接安装
