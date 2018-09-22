@@ -54,7 +54,18 @@ s3 = json.dumps(a)
 
 测试过程中发现，使用mongodump仅dump一张表时，网络发送带宽为300Mbits。再额外指定一张表dump时，网络发送速率能够到达500Mbits。
 
-可见，遍历mongoDB时，多开几个连接，并行处理会大大加快处理速度。
+可见，遍历mongoDB时，多开几个连接，并行处理会大大加快处理速度（因为通常情况下，一个进程（线程）读并处理数据，不容易把Mongo Server的处理能力全部利用起来）。
 
+### 直接获取raw BSON，不使用Python解码文档，可以达到更高的数据加载速度
+
+```
+    for cc in collection.find_raw_batches():
+        # type(cc) is str in python2.7
+        import bson
+        docs = bson.decode_all(cc)
+        # type(docs) is list in python2.7
+```
+
+测试中通过网络读取，性能比上述各种方法都要更好（至少一倍提升，不包括bson.decode_all代码）
 
 Reference： [【Python】Python性能优化的20条建议](https://blog.csdn.net/ztf312/article/details/78906311)
