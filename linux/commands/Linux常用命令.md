@@ -41,6 +41,10 @@ ls -l --time=ctime .bashrc
 
 注意：ls参数里没有--mtime这个参数，因为我们默认通过ls -l查看到的时间就是mtime 。
 
+### pidof 查看程序的进程ID
+
+此命令将检查特定二进制文件的PID，即使另一个同名进程正在运行。例如，当运行两个 Nginx 实例，pidof 命令可用于确定每个特定 Nginx 实例的PID。
+
 ### iostat 查看磁盘读写速度
 
 Ubuntu默认不提供此软件，需要使用命令`sudo apt install sysstat`安装。
