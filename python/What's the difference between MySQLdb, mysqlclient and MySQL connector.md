@@ -74,6 +74,39 @@ As of Connector/Python 2.1.1, binary distributions are available that include a 
 
 Binary distributions that provide the C Extension are either statically linked to MySQL Connector/C or link to an already installed C client library provided by a Connector/C or MySQL Server installation. For those distributions that are not statically linked, you must install Connector/C or MySQL Server if it is not already present on your system. 
 
+#### Connector/Python C Extension
+
+Installations of Connector/Python from version 2.1.1 on support a `use_pure` argument to `mysql.connector.connect()` that indicates whether to use the pure Python interface to MySQL or the C Extension that uses the MySQL C client library:
+
+By default, `use_pure` (use the pure Python implementation) is False as of MySQL 8 and defaults to True in earlier versions. If the C extension is not available on the system then `use_pure` is True.
+
+On Linux, the C and Python implementations are available as different packages. You can install one or both implementations on the same system. On Windows and macOS, the packages include both implementations.
+【在Ubuntu中如果仅安装C Extension包，那么会出现无法导入mysql包的错误。因为Ubuntu的C Extension包仅仅包含二进制的C library文件，还需要安装纯python版的Connector，然后通过`use_pure`参数控制或直接使用`_mysql_connector`。】
+
+For Connector/Python installations that include both implementations, it can optionally be toggled it by passing `use_pure=False` (to use C implementation) or `use_pure=True` (to use the Python implementation) as an argument to `mysql.connector.connect()`.
+
+If you need to check whether your Connector/Python installation is aware of the C Extension, test the `HAVE_CEXT` value. There are different approaches for this. Suppose that your usual arguments for `mysql.connector.connect()` are specified in a dictionary:
+
+```
+config = {
+  'user': 'scott',
+  'password': 'password',
+  'host': '127.0.0.1',
+  'database': 'employees',
+}
+```
+
+The following example illustrates one way to add use_pure to the connection arguments:
+
+```
+import mysql.connector
+
+if mysql.connector.__version_info__ > (2, 1) and mysql.connector.HAVE_CEXT:
+  config['use_pure'] = False
+```
+
+If `use_pure=False` and the C Extension is not available, then Connector/Python will automatically fall back to the pure Python implementation.
+
 [What's the difference between MySQLdb, mysqlclient and MySQL connector/Python?](https://stackoverflow.com/questions/43102442/whats-the-difference-between-mysqldb-mysqlclient-and-mysql-connector-python)
 
 [Python MySQLdb vs mysql-connector query performance](http://charlesnagy.info/it/python/python-mysqldb-vs-mysql-connector-query-performance)
@@ -87,3 +120,5 @@ Binary distributions that provide the C Extension are either statically linked t
 [4.2 Installing Connector/Python from a Binary Distribution](https://dev.mysql.com/doc/connector-python/en/connector-python-installation-binary.html)
 
 [Chapter 8 The Connector/Python C Extension](https://dev.mysql.com/doc/connector-python/en/connector-python-cext.html)
+
+[8.1 Application Development with the Connector/Python C Extension](https://dev.mysql.com/doc/connector-python/en/connector-python-cext-development.html)
