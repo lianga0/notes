@@ -46,6 +46,12 @@ System.Data.SqlClient.SqlException: A transport-level error has occurred when se
 
 **You may also receive one of these error messages when the network load on SQL Server is high.** For example, you may receive one of these error messages when you replicate databases in SQL Server. Or, you may receive one of these error messages when a multiple-user application accesses databases in SQL Server.
 
+Python2.x中的pyodbc库抛出的错误信息（SQL Server服务器负载过高的情况）如下：
+
+```
+'[01000] [Microsoft][ODBC SQL Server Driver][DBNETLIB]ConnectionRead (recv()). (65534) (SQLExecDirectW); [08S01] [Microsoft][ODBC SQL Server Driver][DBNETLIB]General network error. Check your network documentation. (11)'
+```
+
 #### Verify the current configuration
 
 To display the current TCP global parameters, at a command prompt, type the following command, and then press Enter:
