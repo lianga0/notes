@@ -59,6 +59,51 @@ Network File System - NFS，即网络文件系统。由 Sun 公司面向 SMB 相
 
 NFS 用于 Linux 系统和客户端之间的连接。而 Windows 和 Linux 客户端混合使用时，就应该使用 Samba。
 
+### Ubuntu 18.04中挂载支持CIFS的网络硬盘
+
+1. 安装CIFS Utils包
+
+```
+sudo apt-get install cifs-utils
+```
+
+2. 在本地Ubuntu文件系统中创建挂载点
+
+```
+sudo mkdir /mnt/local_share
+```
+
+3. 临时挂载（单次有效）
+
+```
+sudo mount -t cifs //192.168.1.11/public /mnt/local_share                    # 不需认证的情况
+sudo mount -t cifs -o username=name,password=password //10.206.132.127/drs_back /mnt/local_share  #需要用户名和密码
+```
+
+如果挂载时，报如下错误：
+
+```
+mount error(95): Operation not supported
+Refer to the mount.cifs(8) manual page (e.g. man mount.cifs)
+```
+
+可以试试添加`vers`参数。
+
+```
+sudo mount -t cifs -o username=name,password=password,vers=3.0 //10.206.132.127/drs_back /mnt/local_share
+sudo mount -t cifs -o username=name,password=password,vers=2.0 //10.206.132.127/drs_back /mnt/local_share
+```
+4. 写入fstab（重启后自动挂载）
+
+```
+//192.168.1.209/public /mnt/local_share cifs user=john,password=123456 0 0
+```
+
+然后：
+
+```
+sudo mount -a
+```
 
 Reference：[SMB/CIFS协议解析（一）](https://blog.csdn.net/vevenlcf/article/details/43057435)
 
@@ -69,3 +114,5 @@ Reference：[SMB/CIFS协议解析（一）](https://blog.csdn.net/vevenlcf/artic
 [[MS-CIFS]: Common Internet File System (CIFS) Protocol](https://msdn.microsoft.com/en-us/library/ee442092.aspx)
 
 [CIFS 与 SMB 有什么区别？](https://www.getnas.com/2018/11/30/cifs-vs-smb/)
+
+[Ubuntu通过samba挂载Windows目录](https://www.awaimai.com/2692.html)
