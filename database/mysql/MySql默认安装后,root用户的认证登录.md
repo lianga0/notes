@@ -109,7 +109,14 @@ Remember that if you use option #3 you'll have to connect to mysql as your syste
 
 > Note: On some systems (e.g., Debian stretch) 'auth_socket' plugin is called 'unix_socket', so the corresponding SQL command should be: UPDATE user SET plugin='unix_socket' WHERE User='YOUR_SYSTEM_USER';
 
+### Option 4:
 
+```
+$ sudo mysql
+> USE mysql;
+> ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'passwordString';
+> FLUSH PRIVILEGES;
+```
 
 Reference：
 
