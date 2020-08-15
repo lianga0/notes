@@ -1,10 +1,64 @@
 ## 不常用软件记录
 |软件名称 |功能简介            |
 |---------|--------------------|
-|USB宝盒  |U盘SD卡修复软件     |
-|快剪辑   |简单的视频剪辑软件  |
+|USB宝盒   |U盘SD卡修复软件     |
+|快剪辑    |简单的视频剪辑软件  |
 |oCam     |简单的屏幕录制软件  |
+|FFmpeg   |视频处理最常用的开源软件|
+|StarUML  |超好用的UML画图工具|
+|WirelessMon  |无线网络监控软件|
 
+
+
+### [Squid](http://www.squid-cache.org/) fully-featured HTTP proxy
+
+Squid is a fully-featured HTTP/1.0 proxy which is almost (but not quite - we're getting there!) a fully-featured HTTP/1.1 proxy. 
+Squid offers a rich access control, authorization and logging environment to develop web proxy and content serving applications. 
+Squid offers a rich set of traffic optimization options, most of which are enabled by default for simpler installation and high performance.
+
+
+### [youtube-dl](https://github.com/ytdl-org/youtube-dl) download videos from youtube.com or other video platforms
+
+youtube-dl is a command-line program to download videos from YouTube.com and a few more sites. It requires the Python interpreter, version 2.6, 2.7, or 3.2+, and it is not platform specific. It should work on your Unix box, on Windows or on macOS. It is released to the public domain, which means you can modify it, redistribute it or use it however you like.
+
+```
+youtube-dl [OPTIONS] URL [URL...]
+```
+
+列出所有可下载的文件信息：
+
+```
+youtube-dl -F https://www.youtube.com/watch?v=AZP9CU-RPpw
+[youtube] AZP9CU-RPpw: Downloading webpage
+[info] Available formats for AZP9CU-RPpw:
+format code  extension  resolution note
+249          webm       audio only tiny   58k , opus @ 50k (48000Hz), 8.67MiB
+250          webm       audio only tiny   72k , opus @ 70k (48000Hz), 10.96MiB
+251          webm       audio only tiny  130k , opus @160k (48000Hz), 19.73MiB
+248          webm       1920x1080  1080p 4418k , vp9, 30fps, video only, 290.07MiB
+271          webm       2560x1440  1440p 9128k , vp9, 30fps, video only, 769.65MiB
+313          webm       3840x2160  2160p 17898k , vp9, 30fps, video only, 1.92GiB
+```
+
+下载指定大小的视频文件
+
+```
+youtube-dl -f 251 https://www.youtube.com/watch?v=AZP9CU-RPpw
+```
+
+
+### [StarUML](http://staruml.io/) 超好用的UML画图工具推荐
+
+A sophisticated software modeler for agile and concise modeling
+
+StarUML是一个复杂的软件建模工具，旨在支持敏捷和简洁的建模。
+
+
+### [WirelessMon](https://www.passmark.com/products/wirelessmonitor/) Wireless 802.11 WiFi monitoring software
+
+Monitor wireless adapters and WiFi access points
+
+允许使用者监控无线适配器和聚集的状态，显示周边无线接入点或基站实时信息的工具，列出计算机与基站间的信号强度，实时的监测无线网络的传输速度，以便让我们了解网络的下载速度或其稳定性。
 
 
 ### [YApi](https://hellosean1025.github.io/yapi/)
