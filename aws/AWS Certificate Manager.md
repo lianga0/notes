@@ -33,6 +33,11 @@ aws iam list-server-certificates
 
 该命令将返回关于上传的证书的元数据，包括证书的 Amazon 资源名称 (ARN)、友好名称、标识符 (ID) 和过期日期。
 
+删除命令
+```
+aws iam delete-server-certificate --server-certificate-name  xxx-cert-name
+```
+
 > 注意：如果您上传要用于 Amazon CloudFront 的服务器证书，必须使用 --path 指定路径。路径必须以 /cloudfront 开头，并且路径结尾必须包含反斜杠，例如 /cloudfront/test/。
 
 [使用服务器证书](https://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/id_credentials_server-certs.html)
