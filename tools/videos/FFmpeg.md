@@ -19,6 +19,15 @@ $ ffmpeg -i input.mp4 output.avi
 ffmpeg.exe -i video.webm  -i audio.weba -c copy out.webm
 ```
 
+### 转文件编码格式为H265
+
+```
+D:\application\ffmpeg-20200809-6e951d0-win64-static\bin\ffmpeg.exe -i "TimeScapes 4k CineForm.avi" -c:v libx265 -c:a copy -preset veryslow -crf 0 out.mkv
+D:\application\ffmpeg-20200809-6e951d0-win64-static\bin\ffmpeg.exe -i "TimeScapes 4k CineForm.avi"  -i TIMESCAPES_6TRK.wav -c:v libx265 out.mkv
+```
+
 Reference:
 
 https://ffmpeg.org/
+
+https://trac.ffmpeg.org/wiki/Encode/H.265
