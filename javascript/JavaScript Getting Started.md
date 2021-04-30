@@ -1,4 +1,5 @@
-# JavaScript The Ultimate Guide to Modern JavaScript Development — Third Edition — Russ Ferguson
+# Beginning JavaScript
+# The Ultimate Guide to Modern JavaScript Development — Third Edition — Russ Ferguson
 
 > ISBN-13 (pbk): 978-1-4842-4394-7
 
@@ -746,9 +747,19 @@ This is sent over to the second then method, where the results of the first meth
 
 ## JavaScript and Client-Side Development
 
-So far, you have a local server running and JavaScript working. However, you have not yet been able to connect your jQuery library to your project.
+For the front-end developer, you can use `NPM` as a way of quickly putting an application together. When working with `NPM`, you need to create a file called `package.json`. This file keeps track of all the libraries and corresponding version numbers that you are using in your project.
 
-In order to get that to work, you need to add a module builder. The next section will explain how that works and why it’s important.
+To create `package.json` file at the command line, type `npm init`. This will start the process and ask you questions about the project you are about to create. 
+
+When adding a library to your project, you can go back to the command line and ask for it directly. `NPM` will find the Git repository and add it to your project.
+
+For example, let’s add `jQuery` to your project and explore how to use it. Back at the command line, you should be in the same folder as the `package.json` file, type in `npm install jquery`.
+
+This code finds the Git repository with the latest version of jQuery and downloads it to your machine. It also creates a folder called `node_modules` inside that folder, which is a `jquery` folder containing the library you just requested.
+
+The last file that this process creates is a `package-lock.json` file. This file is helpful in making sure the exact versions of all the libraries you have been working with are installed every time.
+
+So far, you have jQuery library. However, you have not yet been able to connect your jQuery library to your project. In order to get that to work, you need to add a module builder. The next section will explain how that works and why it’s important.
 
 ### Introduction to Module Bundlers (Webpack)
 
@@ -756,22 +767,476 @@ Up to this point you have not used the jQuery library that you previously instal
 
 As your projects start to get more complex, you will need a few different modules to make everything work. It would be great to add these modules and not add a long list of `script` tags to your document for every module you want to use.
 
-
 **Webpack** is a tool that you can use to help use import any library you use in your project and also make sure that the code is compatible with some older browsers.
+
+To get Webpack to work, you need to  install the Webpack application. Type `npm install webpack webpack-cli –-save-dev` to add the Webpack library to your project. 
+
+Go back to your `package.json` file and add a new option to the script section. Create a script called dev and assign it the value of webpack. It should look like this:
+
+```
+"dev":"webpack --mode development"
+```
+
+Webpack has defaults that you need to conform to in order to get your example to work. Webpack wants the `index.js` file to be inside the `src` (source) folder.
+
+If you run `npm run dev` again, it will create a dist folder. This is the folder where all compiled code goes. This includes HTML files and CSS files in addition to the JavaScript files. So you need to update the HTML file to point to the JavaScript file inside the dist folder. Now you can add that library into your project without adding it to your HTML page. Inside the `index.js` file, add this line at the top:
+
+```
+import $ from 'jquery'
+```
+
+Your application can now make use of other libraries without you needing to add to the HTML file. You can import them directly into your current document and use a tool like Webpack to bundle them in your JavaScript file.
+
+##### Adding webpack-dev-server
+
+You know that when any of your source code gets updated, you need to manually recompile your code. This is not an acceptable situation and you need to fix it. You can fix this by using the Webpack webserver. 
+
+install the Webpack server. Type:
+
+```
+npm install webpack-dev-server –save-dev
+```
+
+Use the script `webpack-dev-server –mode development -–open` to start a local server to host HTML resource. Here you are directing your script to use the webpack server. The added benefit to this is when you make changes to the files, it will automatically update and refresh the page. This will give you an updated version of the page every time you make an edit.
+
+##### Adding Babel.js
+
+Babel (found at https://babeljs.io/) is a tool that you can use when you want to use the most advanced features of JavaScript and still support browsers that may not yet support these features.
+
+It is easy to add this feature to your project. Now that you have Webpack working, you just need to add a few configuration files so that Webpack knows that it should process all of the JavaScript though Babel.
+
+The first thing you need to do is go back to the command line and add Babel to your project. At the command line, type
+
+```
+npm install @babel/core babel-loader @babel/preset-env –save-dev
+```
+The next step is to configure Babel. The way you are going to configure Babel is by using the `.babelrc` file. 
+
+Configuring the .babelrc File
+
+```
+{
+ "presets":[
+ "@babel/preset-env"
+ ]
+}
+```
+
+You now have Webpack set up and you have Babel set up. You need a way to get these two parts to work together. When running scripts defined in the package.json file, your goal is to have Webpack use Babel to compile your JavaScript. To achieve this, you now need to add a configuration file for Webpack. This will tie the two libraries together.
+
+Since `Babel` is not part of `Webpack`, you need to direct it using a simple JavaScript file. Create a file called `webpack.config.js`. By default, Webpack will look for this file. 
+
+Configuring the `webpack.config.js` File
+
+```
+module.exports = {
+ module:{
+ rules:[{
+  test:/\.js$/,
+  exclude: /node_modules/,
+  use:{
+  loader:"babel-loader"
+ }
+}]
+ }
+}
+```
+
+This file exports configuration options for `Babel`. At this moment, Babel is your only configuration setting. In the future, this could be updated to allow Webpack to work with CSS files, TypeScript files, and other file types including images.
+
+##### Adding HTML and CSS Loaders
+
+You can add a plugin to Webpack that will make sure that your HTML file will be optimized and also end up in your dist folder.
+
+```
+npm install html-webpack-plugin html-loader –save-dev
+```
+
+CSS on its own is not a programming language but by using something like Sass, you can use features that are similar to a programming language. For example, if you want to reuse a color in multiple places, Sass helps you create a variable that holds that current color value. Once the Sass or SCSS files are compiled, they are just CSS files that the browser understands and can be used in your project.
+
+In order to use Sass in your project, you need to add a few loaders to Webpack so it can convert the Sass to CSS. At the command line, type the following:
+
+```
+npm install –-save-dev style-loader css-loader node-sass mini-css-extractplugin sass-loader
+```
+
+With these new abilities added to your project, you can now update Webpack to take advantage of them. You need to update the `webpack.config.js` file so that your JavaScript files can import SCSS files and apply styles.
+
+Your webpack.config.js file should look like Listing:
+
+```
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+modules.export = {
+  module:{
+    rules:[
+      test:/\.js$/,
+  exclude: /node_modules/,
+  use:{
+  loader:"babel-loader"
+}
+]
+},
+{
+  test:/\.html$/,
+    use:[
+  loader:"html-loader",
+  options:{minimize:true}
+]
+},
+{
+  test:/\/scss$/,
+    use:[
+  "style-loader",
+  "css-loader",
+  "sass-loader"
+]
+}
+},
+plugins:[
+  new HtmlWepPackPlugin({
+    template:"./index.html",
+    filename: "./index.html"
+  }),
+  new MiniCSSExtractPlugin({
+    filename: "[name].css",
+    chunkfile: "[id].css"
+  })
+]
+}};
+```
 
 Your project now has the ability to import external libraries, automatically update when files are changed, and output JavaScript that can work on as many browsers as possible despite being writing using the latest JavaScript development techniques.
 
 You are also using Sass, which means your styles work in as many browsers as possible. You get these features because you are using NodeJS as your base. Webpack uses Node to give you a local server to use. Your scripts tell the server to watch the files so that the page will refresh as changes occur.
 
-This is just the beginning of how you can work with Node on the client side. Node is the building block for a large amount of client-side tooling. For example, using the latest version of Angular, you can use the command line to build out a bare bones application.
+This is just the beginning of how you can work with Node on the client side. Node is the building block for a large amount of client-side tooling. For example, using the latest version of Angular, you can use the command line to build out a bare bones application. React has a similar tool called `create-react-app`. Either tool will do a lot of the work for you because Node has access to the file system and can create files and folders for you.
 
-React has a similar tool called `create-react-app`. Either tool will do a lot of the work for you because Node has access to the file system and can create files and folders for you.
+## JavaScript and Server-Side Development
 
-## JavaScript and Server- Side Development
+```
+mkdir nodeProject
+npm init
+npm install express –save
+touch app.js
+```
+
+##### Adding nodemon and Routes to the Express App
+
+```
+npm install -g nodemon
+```
+
+With this library installed, you can update your `package.json` script so that nodemon will be used in your development. The start script should now look like this:
+```
+nodemon app.js
+```
+
+This will watch your application and restart the server as you make changes to files.
+
+The first way to expand your application is to create something called a `route`. A `route` is a path on the server that returns things like HTML pages.
+
+Creating a GET Route Using Node express
+
+```
+ app.get('/states/, (req, res) => {
+ res.send("This is the States Page");
+});
+```
+
+The use of `__dirname` gives Node the path of the current running file.
+
+In a single page application (SPA), you do not load individual pages depending on the path. Using libraries like React, Angular, or Vue, the application will work out how the routes work and not use the server. When working in environments like this, the path of the web service becomes very important to the front-end application. The route will determine how the application makes request and how it retrieves information. Web services often are found on a different server than the front-end application.
+
+install the MySQL module to your project
+
+```
+npm install mysql –save
+```
+
+##### Summary
+
+This chapter covered how to use JavaScript on the server. You learned how to use Node and the Express framework to handle requests from browsers and other applications.
 
 ## JavaScript and Application Frameworks: Angular
 
+In the interest of trying to keep this discussion simple, when I refer to application frameworks, I am talking about any library or framework that helps you to develop full web applications quickly. This could include but is not limited to Angular, React, Vue, and Polymer. Some of these libraries are considered full frameworks, while others are just libraries. 
+
+#### Installing Angular
+
+If you really want to have a good understanding of the Angular framework as a whole, the best place to go to is the project home page (https://angular.io).
+
+```
+npm install -g @angular/cli
+```
+
+This command installs the command line tools for Angular on a global level.
+
+Angular describes itself as a platform for building applications on the Web. Angular is an open source, TypeScript-based platform led by the Angular team at Google. TypeScript is an open-source language maintained by Microsoft.
+
+At the command line, type in this command to make an application called my-app:
+
+```
+ng new my-app
+```
+
+This one command generates a few questions about how you want to develop your application. You can always update the application at a later date.
+
+When you make a selection, the CLI will then create all the files and folders needed for your Angular project. You should now have a folder called my-app. Go into that folder and start the application type:
+
+```
+cd my-app
+ng serve
+```
+
+Once inside the application folder, you can run the application. When the application is finished compiling, you can see it in your browser by opening your browser and typing `localhost:4200`.
+
+When starting this application, you use the command ng serve; this is specific to Angular. By using a series of commands that start with `ng`, you can use the CLI to do things like add files, run your test suite, and build the final version for production. It can even update libraries and dependencies on its own. For the full list, type `ng help`.
+
+### Angular’s Architecture
+
+Frameworks like Angular and React have a concept of `components`. Components are simply where you put all the HTML and CSS for different parts of the application.
+
+An example of this is a header. A header may have the company logo and a login button. Once a person has been authenticated, the header should show a logout button. All of these features should live inside the header component, and the application logic should determine what should be visible and when it should be visible.
+
+Angular also has a concept called `modules`. Modules in Angular are not the same as JavaScript `modules`. In this case, modules in Angular give you a place to put all the related code for a certain function. You can use the header as an example. A header module includes all the files needed to make the header work properly in the application.
+
+All Angular applications have a root module; this module boots up the application. The `app.module.ts` file lives in the `src/app` folder. It is the module that boots up the application.
+
+To create a module, type `ng g module boroughs` at the command line. This code creates a new module that you can build on.
+
+Once the command has been executed, you need to get the larger Angular application to be aware that this module is now available. To do that, open the `app.module.ts` file. Here you import your module into the main application module.
+
+To create a component that will be part of the boroughs module, you need to make sure that the files are generated inside your boroughs folder. At the command line, type 
+
+```
+ng g component boroughs/list-boroughs
+```
+
+This creates all the files needed to create this component inside the boroughs folder. It also updates the `boroughs.module.ts` file, letting that module know that it now has access to the component.
+
+### Creating an Angular Service
+
+Components serve the purpose of displaying information and dealing with user interaction. Components should not be used to do things like fetch data from the database.
+
+In Angular, you use services to perform actions like fetching data from the database. Services can be injected into any component. This provides the ability to write one service for a particular action and reuse it with different components.
+
+You are going to use the CLI to create a service. This service will live in a folder called `service/borough`. The file itself will be called `borough.service`. At the command line, type
+
+```
+ng generate service service/borough/borough
+```
+
+This adds the service folder to inside the `src/app` folder. Then it adds a `boroughs` folder; inside that folder, it creates a `borough.service.ts` file
+
+With your service created, you can now give your custom component access to it; after that you can configure your component so that it can make calls to remote services.
+
+Let’s add your service to the `list-boroughts.component.ts` file. Open that file and import the service. With the service imported, you can create an instance of this class by using the constructor method inside the component.
+
+```
+import { Component, OnInit } from '@angular/core';
+import { BoroughService } from '../../service/borough/borough.service';
+@Component ({
+ selector:'app-list-boroughs;,
+ templateUrl:'./list-boroughs.component.html',
+ styleUrls: ['./list-boroughs.component.sass']
+ })
+export class ListBoroughsComponent implements OnInit{
+ constructor (private boroughService: BoroughService){}
+ ngOnInit(){
+ this.boroughService.getBoroughs().subscribe((data) => {
+ console.log(data);
+ }):
+ }
+}
+```
+
+Components represent the visible part of an Angular application. Component classes have something called lifecycle hooks. These hooks are managed by Angular and they let you know what is happening with any component at a given time. For example, the lifecycle hook you use here is `OnInit`. When used inside a class, lifecycle hooks start with `ng` so the function you will use is the `ngOnInit` function.
+
+### Updating Your Angular Service
+
+The BoroughService Class
+
+```
+import { Injectiable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+@Injectable ({
+  providedIn:root
+})
+export class BoroughService {
+  constructor (private http: HttpClient){}
+  getBoroughs() `Observable<any>{
+  retun this.http.get('https://jsonplaceholder.typicode.com/todos/1')
+ }
+}
+```
+
+One of the things used in a service that is similar to your component is the `@Injectable` decorator. This decorator gives your class the ability to be added or `injected` into multiple components. With that functionality, you can write one service and reuse it.
+
+Now that you have the service set up, you need to make one more addition to the application so that you can use your HttpClient class. In the app.module.ts file, you need add the line
+
+```
+import the HttpClientModule from '@angular/common/http
+```
+
+Open the `ListBoroughsComponent` component. Here you will create a property to your class. This property will be read by template when it is time to display values in the browser. You are going to add a property called results. 
+
+```
+private results: any;
+constructor (private boroughService: BouroughService) {
+}
+ ngOnInit() {
+ this.boroughService.getBroroughs().subscribe((data) => {
+ cosole.log(data);
+ this.results = data;
+ });
+}
+```
+
+Open list-boroughs-components.html. This is where you add all of the HTML that will make up your component. 
+
+The updated page should look like this:
+
+```
+<p>
+ list-boroughs works!
+</p>
+<div> results.title {{results.title}} </div>
+<div> results.Id {{results.userId}} </div>
+<div> results.id {{results.id}} </div>
+```
+
+### Creating a Proxy for Your Local Angular Application
+
+One of the benefits of setting up a proxy is you can connect to either a local server or a remote server while you are developing your application. The proxy file will make sure you are pointing to the right place.
+
+On the same level of the `package.json` file, create a new file called `proxy.conf.json`. This file tells Angular where to look when it is trying to make a call to a REST service. The call will be rerouted to the server that you specify in this file. 
+
+The Body of the proxy.confg.json File
+
+```
+{
+ "/boroughts/*":{
+ "target": http://localhost:3000/boroughs",
+ "secure": false,
+ "loglevel": "debug",
+ "changeOrigin": true,
+ "pathRewrite": {"^/boroughs": ""}
+ }
+}
+```
+
+With this in place, you now need to tell the Angular application that it needs to use this file in development. This way, when you test your web services on the local machine, you can get results in the Angular application.
+
+To do this, you need to open `angular.json` to update how the application runs when you are in development mode. You can do a search for the name “serve.” In the options object, you can add a property right under the `browserTarget` property. That line should look like this:
+
+```
+"proxyConfig": "proxy.conf.json"
+```
+
+At a high level, you have enabled the application to know, when the service makes a call to the `/boroughs` endpoint, to use the proxy and reroute the call to your Node server with the same endpoint.
+
+By using the proxy, you are able to bridge the gap between these two servers and return results from one application to be displayed in the other.
+
+In the service, change the URL of your GET method to `/boroughs`. Without changing anything, you can now look at the console in your browser and see that the Node API sends an array of objects back as a result. 
+
+This example works with local development where you can point your Angular application to a local server or even a remote server to retrieve your data; it is not the same when you are deploying the application into production. For more information about how to deploy your application into production, take a look at the deployment section of the Angular documentation at https://angular.io/guide/deployment.
+
+### Adding Twitter Bootstrap to Your Angular Application
+
+Twitter created an open source framework that lets you create consistent visuals for your website. Bootstrap gives you the ability to develop a site that has consistent typography, forms, and buttons.
+
+In order to give your Angular application the visual consistency that Bootstrap can provide, you need to install it into the application.
+
+```
+npm install bootstrap jquery popper
+```
+
+Once installed, open the angular.json file. The styles and test sections need to be updated to refer to the CSS file Bootstrap provides. This can be found in the node_modules folder. In the scripts section, add the path to the Bootstrap node module. The styles and scripts sections should look like this:
+
+```
+"styles":{
+ "src/styles.scss",
+ "node_modules/bootstrap/dist/css/bootstrap.min.css"
+}
+"scripts":{
+ "node_modules/jquery/dist/jquery.min.js",
+ "node_modules/bootstrap/dist/js/bootstrap.min.js"
+}
+```
+
+You now have Bootstrap as part of your application. You can take advantage of the layout and formatting ability Bootstrap gives you.
+
+
 ## JavaScript and Application Frameworks: React
+
+In the last chapter, you were able to create an Angular application and by using a proxy connect to a Node server that had access to a MySQL database. With this setup, you were able to retrieve data and display it on a screen. You also updated the code so you could use the REST verb POST to send data from a form to the server and then see the results after the database has been updated.
+
+This chapter will cover some of the same ground but you will use React instead of Angular. The purpose of this is to show how different frameworks solve problems differently. React gives the developer the freedom to choose whatever libraries they think will address the challenges they have. Since React has this option, a lot of developers like to put everything together on their own.
+
+Facebook created a way to quickly put a React application together. It is similar to the CLI Angular uses. However, it is important to note that this tool is just to start an application and does not contain the commands to add new files the way that Angular does.
+
+Similar to Angular, if you want to create a React application in any folder you like, you first need to install the application.
+
+```
+npm install -g create-react-ap
+```
+
+To create a brand new React application, at the command line, type
+
+```
+npx create-react-app my-app
+```
+
+This command creates all the files and folders for a basic React application. To start the application, you can type
+
+```
+cd my-app
+npm start
+```
+
+React describes itself as an efficient, declarative JavaScript library for building user interfaces.
+
+React does not have the concept of a service in the way that Angular does. However, React does have the concept of lifecycle methods, just like Angular. For a more detailed list of lifecycle methods and how they work, take a look at the documentation at the official React site (https://reactjs.org/docs/react-component.html).
+
+### Adding a Proxy and Retrieving Data
+
+Just like the Angular application in the last chapter, you need a proxy to connect this application to the separate Node application.
+
+Making a proxy connection using Create React App is very simple. Inside the `package.json` file you need to add a proxy section. This will point to your Node application.
+
+```
+"proxy": "http://localhost:3001",
+```
+
+### Creating, Updating, and Displaying State in a React Component
+
+Each component in React has a concept of `state`. Inside the constructor function you will make a state object. This object will have properties that you will create and assign values to. This is where you let React keep track of variables or objects. The framework can even let you know what the previous value was when it does get updated.
+
+### Adding Bootstrap to React
+
+There are a few ways to add Bootstrap to your React application. The way you are going to add Bootstrap is to use a project called reactstrap.
+
+In install reactstrap, you need to go back to the command line at the base of your application and use NPM to install the library. At the command line, type
+
+```
+npm install bootstrap –save
+npm install –save reactstrap react react-dom
+```
+
+This will install both Twitter Bootstrap and reactstrap into your application. In order for your application to take advantage of having Bootstrap as part of the application, import it into the `index.js` file like this:
+
+```
+import 'bootstrap/dist/css/bootstrap.min.css'
+```
+
+### Adding Strong Types to Your React Application
+
+React does not enforce strong types in the way that Agular does using TypeScript. You can develop a React application and never need to enforce types in your JavaScript.
+
+However, for large applications, it may be helpful to have type safety on your side and have JavaScript enforce datatypes.
+
+Using Flow (https://flow.org/en/) in your React applications is optional, but it gives you the ability to have the compiler check the data types just like TypeScript or other languages like Java enforces types. It is also important to note that you can use React with TypeScript if you like (https://facebook.github.io/create-react-app/docs/adding-typescript).
 
 ## JavaScript and Static Deployment
 
