@@ -26,6 +26,16 @@ D:\application\ffmpeg-20200809-6e951d0-win64-static\bin\ffmpeg.exe -i "TimeScape
 D:\application\ffmpeg-20200809-6e951d0-win64-static\bin\ffmpeg.exe -i "TimeScapes 4k CineForm.avi"  -i TIMESCAPES_6TRK.wav -c:v libx265 out.mkv
 ```
 
+### 转换文件码率
+
+```
+C:\app\ffmpeg-n4.4-19-g8d172d9409-win64-gpl-4.4\bin\ffmpeg.exe -i input.mp4  -b 3000K output.mp4
+
+or
+
+C:\app\ffmpeg-n4.4-19-g8d172d9409-win64-gpl-4.4\bin\ffmpeg.exe -i input.mp4  -b 3048K -minrate 3048K -maxrate 8800K -bufsize 4000K output.mp4
+```
+
 Reference:
 
 https://ffmpeg.org/
