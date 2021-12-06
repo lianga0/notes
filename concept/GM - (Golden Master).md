@@ -13,3 +13,18 @@ Golden master is the final version of software development, succeeding alpha, be
 From： 
 
 [Golden Master (GM)](https://www.techopedia.com/definition/5434/golden-master-gm)
+
+# Java
+
+## TCK (Technology Conformance Kit)
+
+技术兼容性套件
+
+## JSR (Java Specification Requests)
+
+Java规范请求
+
+## RI (Reference Implementation)
+
+参考实现
+
