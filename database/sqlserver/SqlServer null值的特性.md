@@ -75,3 +75,7 @@ The following table shows the results of applying an OR operator to two Boolean 
     </tr> 
   </tbody> 
 </table>
+
+Reference：
+
+[The Three-Valued Logic of SQL](https://modern-sql.com/concept/three-valued-logic)
