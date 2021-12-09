@@ -200,6 +200,11 @@ function myFunction(){
 
 Using strict mode ensures that the browser will execute your code in the most efficient way possible and give you the most amount of feedback when errors occur.
 
+> strict mode由来
+
+> As JavaScript evolved, the language designers attempted to correct flaws in the early (pre-ES5) versions. In order to maintain backward compatibility, it is not possible to remove legacy features, no matter how flawed. But in ES5 and later, programs can opt in to JavaScript’s strict mode in which a number of early language mistakes have been
+corrected.  In ES6 and later, the use of new language features often implicitly invokes strict mode. For example, if you use the ES6 class keyword or create an ES6 module, then all the code within the class or module is automatically strict, and the old, flawed features are not available in those contexts.
+
 ### Destructuring assignment
 
 The **destructuring assignment** syntax is a JavaScript expression that makes it possible to unpack values from arrays, or properties from objects, into distinct variables.
