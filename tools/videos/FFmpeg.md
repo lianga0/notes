@@ -36,6 +36,12 @@ or
 C:\app\ffmpeg-n4.4-19-g8d172d9409-win64-gpl-4.4\bin\ffmpeg.exe -i input.mp4  -b 3048K -minrate 3048K -maxrate 8800K -bufsize 4000K output.mp4
 ```
 
+### 转换字幕格式
+
+```
+ffmpeg.exe -i "imput.vtt" "output.srt"
+```
+
 Reference:
 
 https://ffmpeg.org/
