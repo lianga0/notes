@@ -63,6 +63,16 @@ draw.io Desktop is designed to be completely isolated from the Internet, apart f
 
 No diagram data is ever sent externally, nor do we send any analytics about app usage externally. This means certain functionality for which we do not have a JavaScript implementation do not work in the Desktop build, namely .vsd and Gliffy import.
 
+### [jq](https://github.com/stedolan/jq) jq is a lightweight and flexible command-line JSON processor.
+
+[Guide to Linux jq Command for JSON Processing](https://www.baeldung.com/linux/jq-command-json)
+
+`JSON` is a widely employed structured data format typically used in most modern APIs and data services. It’s particularly popular in web applications due to its lightweight nature and compatibility with JavaScript.
+
+**Unfortunately, shells such as Bash can’t interpret and work with JSON directly.** This means that working with JSON via the command line can be cumbersome, involving text manipulation using a combination of tools such as `sed` and `grep`.
+
+[`jq`](https://stedolan.github.io/jq/) is like `sed` for `JSON` data - you can use it to slice and filter and map and transform structured data with the same ease that `sed`, `awk`, `grep` and friends let you play with text.
+
 
 ### [StarUML](http://staruml.io/) 超好用的UML画图工具推荐
 
