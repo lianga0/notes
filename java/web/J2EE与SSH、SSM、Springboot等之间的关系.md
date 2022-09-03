@@ -8,7 +8,7 @@ J2EE核心是一组技术规范与指南，其中所包含的各类组件、服�
 
 J2EE组件和“标准的” Java类的不同点在于：它被装配在一个J2EE应用中，具有固定的格式并遵守J2EE规范，由J2EE服务器对其进行管理。J2EE规范是这样定义J2EE组件的：客户端应用程序和applet是运行在客户端的组件；Java Servlet和Java Server Pages (JSP) 是运行在服务器端的Web组件；Enterprise Java Bean (EJB )组件是运行在服务器端的业务组件。
 
-简单而言：J2EE是一套规范，里面定义了`servle`, `jdbc`, `jmx`, `jni`, `ejb`，对象持久等等大量的规范（接口），当初sun定义这些规范的目的是希望通过J2EE解决所有的问题。但是它实在太庞大了，要完全掌握和使用需要付出很多代价。而这些规范又很多具体实现，如apache的tomcat实现了`servlet`和`jsp`，jboss，weblogic实现了`ejb`等，大部分数据库里面都有jdbc驱动。
+简单而言：J2EE是一套规范，里面定义了`servlet`, `jdbc`, `jmx`, `jni`, `ejb`，对象持久等等大量的规范（接口），当初sun定义这些规范的目的是希望通过J2EE解决所有的问题。但是它实在太庞大了，要完全掌握和使用需要付出很多代价。而这些规范又很多具体实现，如apache的tomcat实现了`servlet`和`jsp`，jboss，weblogic实现了`ejb`等，大部分数据库里面都有jdbc驱动。
 
 而所谓的SSH、SSM、Springboot框架是J2EE方向的一个具体结构、框架展示。J2EE是标准，SSH是技术，它吸收了部分J2EE的设计理念，但是又没有完全遵守J2EE规范，自成一套体系。
 
