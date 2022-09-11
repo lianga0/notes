@@ -1,0 +1,1055 @@
+1
+00:00:00,590 --> 00:00:02,590
+- Hi, I'm Tim Berglund with Confluent.
+
+2
+00:00:02,590 --> 00:00:05,130
+I'd like to tell you what Apache Kafka is.
+
+3
+00:00:05,130 --> 00:00:07,590
+But first, I wanna start
+with some background.
+
+4
+00:00:07,590 --> 00:00:08,690
+For a long time now,
+
+5
+00:00:08,690 --> 00:00:10,330
+we have written programs
+
+6
+00:00:10,330 --> 00:00:13,340
+that store information in databases.
+
+7
+00:00:13,340 --> 00:00:15,550
+Now, what databases encouraged us to do,
+
+8
+00:00:15,550 --> 00:00:18,560
+is to think of the world
+in terms of things,
+
+9
+00:00:18,560 --> 00:00:21,170
+things like I don't know, users,
+
+10
+00:00:21,170 --> 00:00:24,790
+and maybe a thermostat,
+that's a thermometer
+
+11
+00:00:24,790 --> 00:00:26,010
+but you get the idea.
+
+12
+00:00:26,010 --> 00:00:29,140
+Maybe a physical thing like a train,
+
+13
+00:00:29,140 --> 00:00:33,140
+let's say a train, things,
+there are things in the world
+
+14
+00:00:33,140 --> 00:00:34,810
+database encourages thinking those terms,
+
+15
+00:00:34,810 --> 00:00:36,640
+and those things have some state,
+
+16
+00:00:36,640 --> 00:00:39,360
+we take that state, we
+store it in the database.
+
+17
+00:00:39,360 --> 00:00:41,100
+This has worked well for decades.
+
+18
+00:00:41,100 --> 00:00:42,620
+But now some people are finding
+
+19
+00:00:42,620 --> 00:00:45,370
+that it's better rather than
+thinking of things first,
+
+20
+00:00:45,370 --> 00:00:47,400
+to think of events first.
+
+21
+00:00:47,400 --> 00:00:49,380
+Now events have some state too, right?
+
+22
+00:00:49,380 --> 00:00:52,700
+An event has a description
+of what happened with it.
+
+23
+00:00:52,700 --> 00:00:54,590
+But the primary idea is that,
+
+24
+00:00:54,590 --> 00:00:57,050
+the event is an indication in time
+
+25
+00:00:57,050 --> 00:00:58,660
+that the thing took place.
+
+26
+00:00:58,660 --> 00:01:00,200
+Now it's a little bit cumbersome
+
+27
+00:01:00,200 --> 00:01:02,280
+to store events in databases,
+
+28
+00:01:02,280 --> 00:01:05,590
+instead, we use a structure called a log.
+
+29
+00:01:05,590 --> 00:01:08,940
+And a log is just an ordered
+sequence of these events,
+
+30
+00:01:08,940 --> 00:01:12,390
+an event happens and
+we write it into a log,
+
+31
+00:01:12,390 --> 00:01:13,223
+a little bit of state,
+
+32
+00:01:13,223 --> 00:01:14,550
+a little bit of description what happens.
+
+33
+00:01:14,550 --> 00:01:16,850
+And that says, hey, that
+event happened at that time.
+
+34
+00:01:16,850 --> 00:01:18,810
+As you can see, logs are
+really easy to think about,
+
+35
+00:01:18,810 --> 00:01:20,960
+they're also easy to build at scale,
+
+36
+00:01:20,960 --> 00:01:23,230
+which historically has not
+quite been true of databases,
+
+37
+00:01:23,230 --> 00:01:24,540
+which have been a little cumbersome
+
+38
+00:01:24,540 --> 00:01:26,480
+in one way or another to build at scale.
+
+39
+00:01:26,480 --> 00:01:29,490
+Apache Kafka is the system
+for managing these logs,
+
+40
+00:01:29,490 --> 00:01:31,570
+using a fairly standard historical term,
+
+41
+00:01:31,570 --> 00:01:35,470
+it calls them topics, this is a topic.
+
+42
+00:01:35,470 --> 00:01:37,640
+A topic is just an ordered
+collection of events
+
+43
+00:01:37,640 --> 00:01:39,520
+that are stored in a durable way,
+
+44
+00:01:39,520 --> 00:01:41,680
+durable meaning that
+they're written to disk,
+
+45
+00:01:41,680 --> 00:01:42,710
+and they're replicated,
+
+46
+00:01:42,710 --> 00:01:44,140
+so they're stored on more than one disk
+
+47
+00:01:44,140 --> 00:01:45,130
+on more than one server,
+
+48
+00:01:45,130 --> 00:01:47,160
+somewhere wherever that
+infrastructure runs,
+
+49
+00:01:47,160 --> 00:01:48,920
+so that there's no one hardware failure
+
+50
+00:01:48,920 --> 00:01:50,840
+that can make that data go away.
+
+51
+00:01:50,840 --> 00:01:53,610
+Topics can store data for
+a short period of time,
+
+52
+00:01:53,610 --> 00:01:56,290
+like a few hours, or days, or years,
+
+53
+00:01:56,290 --> 00:01:58,570
+or hundreds of years or indefinitely.
+
+54
+00:01:58,570 --> 00:02:01,090
+Topics can also be relatively small,
+
+55
+00:02:01,090 --> 00:02:02,240
+or they can be enormous.
+
+56
+00:02:02,240 --> 00:02:05,310
+There's nothing about the
+economics of Kafka that says
+
+57
+00:02:05,310 --> 00:02:08,330
+that topics have to be large
+in order for it to make sense,
+
+58
+00:02:08,330 --> 00:02:10,520
+and there's nothing about
+the architecture of Kafka
+
+59
+00:02:10,520 --> 00:02:12,600
+that says that they have to stay small,
+
+60
+00:02:12,600 --> 00:02:14,410
+so they can be small, they can be big,
+
+61
+00:02:14,410 --> 00:02:15,880
+they can remember data forever,
+
+62
+00:02:15,880 --> 00:02:17,630
+they can remember data
+just for a little while.
+
+63
+00:02:17,630 --> 00:02:19,810
+But there are persistent record of events.
+
+64
+00:02:19,810 --> 00:02:21,460
+Each one of those events represents
+
+65
+00:02:21,460 --> 00:02:24,650
+a thing happening in the
+business like remember a user,
+
+66
+00:02:24,650 --> 00:02:27,650
+maybe a user updates her shipping address,
+
+67
+00:02:27,650 --> 00:02:31,480
+or a train, unloads cargo,
+or a thermostat reports
+
+68
+00:02:31,480 --> 00:02:33,230
+that the temperature has gone from comfy
+
+69
+00:02:33,230 --> 00:02:35,390
+to is it getting hot in here.
+
+70
+00:02:35,390 --> 00:02:37,920
+Each one of those things can
+be an event stored in a topic,
+
+71
+00:02:37,920 --> 00:02:41,190
+and Kafka encourages you
+to think of events first,
+
+72
+00:02:41,190 --> 00:02:42,360
+and things second.
+
+73
+00:02:42,360 --> 00:02:44,570
+Now, back when databases ruled the world,
+
+74
+00:02:44,570 --> 00:02:49,070
+it was kind of a trend to
+build one large program,
+
+75
+00:02:49,070 --> 00:02:52,170
+we'll just build this
+gigantic program here
+
+76
+00:02:52,170 --> 00:02:55,630
+that uses one big database all by itself.
+
+77
+00:02:55,630 --> 00:02:59,660
+And it was customary for a
+number of reasons to do this,
+
+78
+00:02:59,660 --> 00:03:01,560
+but these things grew to a point
+
+79
+00:03:01,560 --> 00:03:03,290
+where they were difficult to change,
+
+80
+00:03:03,290 --> 00:03:04,970
+and also difficult to think about.
+
+81
+00:03:04,970 --> 00:03:07,090
+They got too big for any one developer
+
+82
+00:03:07,090 --> 00:03:09,610
+to fit that whole program
+in his or her head
+
+83
+00:03:09,610 --> 00:03:10,443
+at the same time.
+
+84
+00:03:10,443 --> 00:03:12,760
+And if you've lived like this,
+you know that that's true.
+
+85
+00:03:12,760 --> 00:03:16,620
+Now the trend is to write lots
+and lots of small programs,
+
+86
+00:03:16,620 --> 00:03:18,380
+each one of which is small enough
+
+87
+00:03:18,380 --> 00:03:21,570
+to fit in your head and think
+about and version and change
+
+88
+00:03:21,570 --> 00:03:23,520
+and evolve all on its own.
+
+89
+00:03:23,520 --> 00:03:25,680
+And these things can talk to each other
+
+90
+00:03:25,680 --> 00:03:27,500
+through Kafka topics.
+
+91
+00:03:27,500 --> 00:03:29,750
+So each one of these services
+can consume the message
+
+92
+00:03:29,750 --> 00:03:32,693
+from a Kafka topic, do
+whatever its computation is,
+
+93
+00:03:32,693 --> 00:03:34,300
+that goes on in there,
+
+94
+00:03:34,300 --> 00:03:38,330
+and then produce that message
+off to another Kafka topic
+
+95
+00:03:38,330 --> 00:03:39,600
+that lives over here.
+
+96
+00:03:39,600 --> 00:03:41,750
+So that output is now durably,
+
+97
+00:03:41,750 --> 00:03:45,450
+and maybe even permanently
+recorded for other services
+
+98
+00:03:45,450 --> 00:03:48,080
+and other concerns in
+the system to process.
+
+99
+00:03:48,080 --> 00:03:48,920
+So with all this data
+
+100
+00:03:48,920 --> 00:03:50,910
+living in these persistent
+real time streams,
+
+101
+00:03:50,910 --> 00:03:52,330
+and I've drawn two of them now,
+
+102
+00:03:52,330 --> 00:03:53,350
+but imagine there are dozens
+
+103
+00:03:53,350 --> 00:03:55,540
+or hundreds more in a large system.
+
+104
+00:03:55,540 --> 00:03:57,910
+Now it's possible to build new services
+
+105
+00:03:57,910 --> 00:04:01,040
+that perform real time
+analysis of that data.
+
+106
+00:04:01,040 --> 00:04:04,620
+So I can stand up some
+other service over here,
+
+107
+00:04:04,620 --> 00:04:07,020
+that does some kind of gauge,
+
+108
+00:04:07,020 --> 00:04:09,180
+some sort of real time
+analytics dashboard.
+
+109
+00:04:09,180 --> 00:04:13,340
+And that is just consuming
+messages from this topic here,
+
+110
+00:04:13,340 --> 00:04:15,350
+that's in contrast to
+the way it used to be
+
+111
+00:04:15,350 --> 00:04:18,060
+where you ran a batch process overnight.
+
+112
+00:04:18,060 --> 00:04:19,440
+Now, it's possible that yesterday
+
+113
+00:04:19,440 --> 00:04:21,580
+is a long time ago for
+some businesses now.
+
+114
+00:04:21,580 --> 00:04:23,990
+You might want that insight to be instant
+
+115
+00:04:23,990 --> 00:04:26,210
+or as close to instant
+as it could possibly be.
+
+116
+00:04:26,210 --> 00:04:30,570
+And with data in these topics
+as events that get processed
+
+117
+00:04:30,570 --> 00:04:32,360
+as soon as they happen.
+
+118
+00:04:32,360 --> 00:04:34,140
+It's now fairly straightforward
+
+119
+00:04:34,140 --> 00:04:36,870
+to build these services
+that can do that analysis
+
+120
+00:04:36,870 --> 00:04:37,830
+in real time.
+
+121
+00:04:37,830 --> 00:04:40,450
+So you've got events, you've got topics,
+
+122
+00:04:40,450 --> 00:04:41,830
+you've got all these little services
+
+123
+00:04:41,830 --> 00:04:43,227
+talking to each other through topics,
+
+124
+00:04:43,227 --> 00:04:45,000
+you got real time analytics.
+
+125
+00:04:45,000 --> 00:04:47,450
+I think if you have those
+four things in your head,
+
+126
+00:04:47,450 --> 00:04:49,070
+you've got a decent idea
+
+127
+00:04:49,070 --> 00:04:51,710
+of kind of the minimum
+viable understanding
+
+128
+00:04:51,710 --> 00:04:53,440
+not only of what Kafka is,
+
+129
+00:04:53,440 --> 00:04:55,490
+which is this distributed log thing,
+
+130
+00:04:55,490 --> 00:04:58,120
+but also of the kinds of
+software architectures
+
+131
+00:04:58,120 --> 00:05:00,350
+that Kafka tends to give rise to.
+
+132
+00:05:00,350 --> 00:05:02,470
+When people start building systems on it,
+
+133
+00:05:02,470 --> 00:05:03,940
+this is what happens.
+
+134
+00:05:03,940 --> 00:05:06,210
+Once a company starts using Kafka,
+
+135
+00:05:06,210 --> 00:05:08,960
+it tends to have this viral effect, right?
+
+136
+00:05:08,960 --> 00:05:11,760
+We've got these persistent
+distributed logs
+
+137
+00:05:11,760 --> 00:05:14,040
+that are records of the
+things that have happened,
+
+138
+00:05:14,040 --> 00:05:15,660
+we've got things talking through them,
+
+139
+00:05:15,660 --> 00:05:17,150
+but there are other systems.
+
+140
+00:05:17,150 --> 00:05:19,030
+I mean, what's this,
+there's this database,
+
+141
+00:05:19,030 --> 00:05:20,500
+there's probably gonna be, you know,
+
+142
+00:05:20,500 --> 00:05:24,060
+another database out there that was built,
+
+143
+00:05:24,060 --> 00:05:25,490
+before Kafka came along,
+
+144
+00:05:25,490 --> 00:05:27,010
+and you wanna integrate these systems.
+
+145
+00:05:27,010 --> 00:05:29,280
+There could be other systems entirely,
+
+146
+00:05:29,280 --> 00:05:31,190
+maybe there's a search cluster,
+
+147
+00:05:31,190 --> 00:05:34,470
+maybe you use some SAS product
+to help your sales people
+
+148
+00:05:34,470 --> 00:05:37,030
+organize their efforts, all
+these systems in the business,
+
+149
+00:05:37,030 --> 00:05:38,970
+and their data isn't in Kafka.
+
+150
+00:05:38,970 --> 00:05:43,000
+Well, Kafka Connect is a tool
+that helps get that data in,
+
+151
+00:05:43,000 --> 00:05:43,900
+and back out,
+
+152
+00:05:43,900 --> 00:05:45,900
+when there's all these
+other systems in the world,
+
+153
+00:05:45,900 --> 00:05:49,040
+you wanna collect data, so
+changes happen in a database,
+
+154
+00:05:49,040 --> 00:05:51,050
+and you wanna collect that data
+
+155
+00:05:51,050 --> 00:05:55,230
+and get it written into a topic like that.
+
+156
+00:05:55,230 --> 00:05:57,930
+And now, I can stand up some new service
+
+157
+00:05:57,930 --> 00:05:59,500
+that consumes that data,
+
+158
+00:05:59,500 --> 00:06:01,410
+and does whatever computation is on it,
+
+159
+00:06:01,410 --> 00:06:03,660
+now that it's in a Kafka
+topic, that's the whole point,
+
+160
+00:06:03,660 --> 00:06:05,900
+Connect gets that data in,
+
+161
+00:06:05,900 --> 00:06:08,210
+then that service produces some result,
+
+162
+00:06:08,210 --> 00:06:12,870
+which goes to a new topic over here.
+
+163
+00:06:12,870 --> 00:06:17,560
+And connect is the piece that moves it
+
+164
+00:06:17,560 --> 00:06:22,560
+to whatever that external
+legacy system is here.
+
+165
+00:06:23,820 --> 00:06:26,210
+So Kafka Connect is this process
+
+166
+00:06:26,210 --> 00:06:28,370
+that does this inputting
+and this outputting,
+
+167
+00:06:28,370 --> 00:06:31,960
+and it's also an ecosystem of connectors.
+
+168
+00:06:31,960 --> 00:06:34,230
+There are dozens, even
+hundreds of connectors
+
+169
+00:06:34,230 --> 00:06:36,400
+out there in the world, some
+of them are open source,
+
+170
+00:06:36,400 --> 00:06:38,900
+some of them are commercial,
+some of them are in between,
+
+171
+00:06:38,900 --> 00:06:40,570
+but they're these little pluggable modules
+
+172
+00:06:40,570 --> 00:06:41,490
+that you can deploy,
+
+173
+00:06:41,490 --> 00:06:44,280
+to get this integration
+done in a declarative way,
+
+174
+00:06:44,280 --> 00:06:45,730
+you deploy them, you configure them,
+
+175
+00:06:45,730 --> 00:06:48,710
+you don't write code, to do
+this reading from the database,
+
+176
+00:06:48,710 --> 00:06:51,270
+this writing to whatever
+that external system is.
+
+177
+00:06:51,270 --> 00:06:54,030
+Those modules already exist,
+the code's already written,
+
+178
+00:06:54,030 --> 00:06:56,910
+you just deploy them and
+Connect does that integration
+
+179
+00:06:56,910 --> 00:06:58,290
+to those external systems.
+
+180
+00:06:58,290 --> 00:07:01,000
+And let's think about the
+work that these things do,
+
+181
+00:07:01,000 --> 00:07:02,790
+these services, these boxes I'm drawing,
+
+182
+00:07:02,790 --> 00:07:04,940
+they have some life of their
+own, they're programs, right?
+
+183
+00:07:04,940 --> 00:07:07,660
+But they're gonna process
+messages from topics,
+
+184
+00:07:07,660 --> 00:07:09,010
+and they're gonna have some computation
+
+185
+00:07:09,010 --> 00:07:11,280
+that they wanna do over those messages.
+
+186
+00:07:11,280 --> 00:07:13,970
+And it's amazing, there's
+really just a few things
+
+187
+00:07:13,970 --> 00:07:16,520
+that people end up doing, like, say,
+
+188
+00:07:16,520 --> 00:07:20,760
+you have messages, these green messages,
+
+189
+00:07:20,760 --> 00:07:22,590
+you wanna group all those up
+
+190
+00:07:22,590 --> 00:07:24,670
+and add some field,
+
+191
+00:07:24,670 --> 00:07:26,580
+like come up with total weight
+
+192
+00:07:26,580 --> 00:07:27,700
+of all the train cars
+
+193
+00:07:27,700 --> 00:07:29,910
+that past a certain point or something,
+
+194
+00:07:29,910 --> 00:07:31,130
+but only a certain kind of car,
+
+195
+00:07:31,130 --> 00:07:32,840
+only the green kinds of cars.
+
+196
+00:07:32,840 --> 00:07:34,390
+And then you've got these other,
+
+197
+00:07:34,390 --> 00:07:36,490
+say, you've got these orange ones here.
+
+198
+00:07:36,490 --> 00:07:37,920
+So right away we see that,
+
+199
+00:07:37,920 --> 00:07:39,360
+we're gonna have to go
+through those messages,
+
+200
+00:07:39,360 --> 00:07:41,600
+we're gonna have to group by some key,
+
+201
+00:07:41,600 --> 00:07:42,680
+and then we'll take the group
+
+202
+00:07:42,680 --> 00:07:44,830
+and run some aggregation over it,
+
+203
+00:07:44,830 --> 00:07:47,340
+or maybe count them or
+something like that.
+
+204
+00:07:47,340 --> 00:07:51,890
+Maybe you want to filter,
+maybe I've got this topic,
+
+205
+00:07:51,890 --> 00:07:56,040
+and let's see, make some room
+for some other topic over here
+
+206
+00:07:56,040 --> 00:07:57,710
+that's got some other kind of data.
+
+207
+00:07:57,710 --> 00:08:00,130
+And I wanna take all the messages here,
+
+208
+00:08:00,130 --> 00:08:03,870
+and somehow link them with
+messages in this topic,
+
+209
+00:08:03,870 --> 00:08:05,970
+and enrich when I see this,
+
+210
+00:08:05,970 --> 00:08:06,950
+this message happened here,
+
+211
+00:08:06,950 --> 00:08:08,330
+I wanna go enrich it with the data
+
+212
+00:08:08,330 --> 00:08:09,690
+that's in this other topic.
+
+213
+00:08:09,690 --> 00:08:11,020
+These are common things,
+
+214
+00:08:11,020 --> 00:08:12,220
+if the first time you thought about it,
+
+215
+00:08:12,220 --> 00:08:13,520
+that might seem unusual,
+
+216
+00:08:13,520 --> 00:08:15,560
+but those things grouping, aggregating,
+
+217
+00:08:15,560 --> 00:08:17,660
+filtering, enrichment.
+
+218
+00:08:17,660 --> 00:08:18,493
+Enrichment, by the way,
+
+219
+00:08:18,493 --> 00:08:21,520
+it goes by another name and
+database, that's a joint, right?
+
+220
+00:08:21,520 --> 00:08:24,530
+These are the things that
+these services are going to do.
+
+221
+00:08:24,530 --> 00:08:27,470
+They're simple in principle
+to think about and to sketch,
+
+222
+00:08:27,470 --> 00:08:29,840
+but to actually write the
+code to make all that happen,
+
+223
+00:08:29,840 --> 00:08:32,430
+takes some work and that's
+not work you wanna do.
+
+224
+00:08:32,430 --> 00:08:34,690
+So Kafka, again, in the box,
+
+225
+00:08:34,690 --> 00:08:37,180
+just like it has Connect
+for doing data integration,
+
+226
+00:08:37,180 --> 00:08:39,550
+it has an API called Kafka streams.
+
+227
+00:08:39,550 --> 00:08:41,930
+That's a Java API that handles
+
+228
+00:08:41,930 --> 00:08:44,410
+all of the framework and infrastructure
+
+229
+00:08:44,410 --> 00:08:47,660
+and kind of kind of undifferentiated stuff
+
+230
+00:08:47,660 --> 00:08:50,180
+you'd have to build to get that work done.
+
+231
+00:08:50,180 --> 00:08:53,940
+So you can use that as a
+Java API, in your services,
+
+232
+00:08:53,940 --> 00:08:57,180
+and get all that done in a
+scalable and fault tolerant way,
+
+233
+00:08:57,180 --> 00:09:01,060
+just like we expect for modern
+applications to be able to do
+
+234
+00:09:01,060 --> 00:09:03,730
+and that's not framework
+code you have to write,
+
+235
+00:09:03,730 --> 00:09:06,850
+you just get to use it
+because you're using Kafka.
+
+236
+00:09:06,850 --> 00:09:08,860
+Now if you're a developer
+and you wanna learn more,
+
+237
+00:09:08,860 --> 00:09:12,090
+you know, the thing to do,
+is to start writing code.
+
+238
+00:09:12,090 --> 00:09:13,210
+Check those things out,
+
+239
+00:09:13,210 --> 00:09:14,540
+let us know if you have any questions
+
+240
+00:09:14,540 --> 00:09:16,190
+and I hope we hear from you soon.
+
+241
+00:09:17,816 --> 00:09:20,399
+(upbeat music)
+
