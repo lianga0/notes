@@ -28,6 +28,23 @@ Ubuntu中可以使用apt或apt-get命令直接下载软件安装的deb包。如�
 apt download packageName
 ```
 
+## 下载指定包全部依赖deb包（普通用户权限即可）
+
+离线安装指定包时，该包往往存在很多依赖，想要快速下载所有依赖包，可以使用如下命令：
+
+```
+PACKAGES="wget unzip"
+apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests \
+  --no-conflicts --no-breaks --no-replaces --no-enhances \
+  --no-pre-depends ${PACKAGES} | grep "^\w")
+```
+
+### 安装当前目录下全部包
+
+```
+# 本地安装
+dpkg -i *.deb
+```
 
 ### 解压deb包
 
@@ -49,6 +66,7 @@ data.tar.xz
 这里主要用到data.tar.gz等包，这个是放着二进制文件的包，用`tar -xf data.tar.gz`解压这个包可以查看安装包主要包含的文件。
 
 解压control.tar.xz文件，可以查看control文件，主要描述包的依赖、描述等
+
 
 ### What is xxxx-dev package used for in Linux
 
@@ -87,3 +105,7 @@ used on it's own, but as a dependency of python2.7-dev.
 [What is python-dev package used for](https://stackoverflow.com/questions/31002091/what-is-python-dev-package-used-for)
 
 [Extending Python with C or C++](https://docs.python.org/2/extending/extending.html)
+
+[How to list/download the recursive dependencies of a debian package?](https://stackoverflow.com/questions/22008193/how-to-list-download-the-recursive-dependencies-of-a-debian-package)
+
+[How to download all dependencies and packages to directory](https://stackoverflow.com/questions/13756800/how-to-download-all-dependencies-and-packages-to-directory)
