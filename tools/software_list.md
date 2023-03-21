@@ -7,6 +7,7 @@
 |FFmpeg   |视频处理最常用的开源软件|
 |StarUML  |超好用的UML画图工具|
 |WirelessMon  |无线网络监控软件|
+|Doffen SSH Tunnel  |Widnows平台管理SSH会话和隧道。Manage hierarchy of ssh sessions and tunnels|
 
 
 
@@ -46,6 +47,13 @@ format code  extension  resolution note
 youtube-dl -f 251 https://www.youtube.com/watch?v=AZP9CU-RPpw
 ```
 
+### ttyd一个好用的网页版终端工具[ttyd - Share your terminal over the web](https://github.com/tsl0922/ttyd)
+
+ttyd is a simple command-line tool for sharing terminal over the web.
+
+ttyd 是一个 C 语言编写的命令行程序，可以把任意命令行程序分享到网页上操作，可以看做是个网页版的远程终端，支持 Linux、macOS、FreeBSD 系统，还可以运行在 OpenWrt/LEDE 之类的嵌入式系统上。
+
+
 ### [JumpServer](https://github.com/jumpserver/jumpserver)多云环境下更好用的堡垒机
 
 JumpServer 是全球首款开源的堡垒机，使用 GPLv3 开源协议，是符合 4A 规范的运维安全审计系统。
@@ -72,6 +80,20 @@ No diagram data is ever sent externally, nor do we send any analytics about app 
 **Unfortunately, shells such as Bash can’t interpret and work with JSON directly.** This means that working with JSON via the command line can be cumbersome, involving text manipulation using a combination of tools such as `sed` and `grep`.
 
 [`jq`](https://stedolan.github.io/jq/) is like `sed` for `JSON` data - you can use it to slice and filter and map and transform structured data with the same ease that `sed`, `awk`, `grep` and friends let you play with text.
+
+
+### HFS(Http File Server) 局域网分享文件的神器
+
+HTTP File Server是一款免费，开源的http文件共享服务器，简称HFS，软件基于HTTP协议实现，所以只要在需要提供文件共享服务的Windows电脑运行程序，其他客户端使用自带的浏览器就可以很方便的访问啦
+[HFS: HTTP File Server (version 3)](https://github.com/rejetto/hfs)
+[HFS ~ Http File Server](https://www.rejetto.com/hfs/)
+
+
+### [sslh](https://github.com/yrutschle/sslh) -- A ssl/ssh multiplexer
+
+Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)
+
+www.rutschle.net/tech/sslh/README.html
 
 
 ### [StarUML](http://staruml.io/) 超好用的UML画图工具推荐
