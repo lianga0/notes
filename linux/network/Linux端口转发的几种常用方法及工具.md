@@ -2,6 +2,9 @@
 
 > https://cloud.tencent.com/developer/article/1688152
 
+> 2022.11.10
+
+
 ## ncat 端口转发
 
 netcat（简称nc）被誉为网络安全界的”瑞士军刀“，一个简单而有用的工具，这里介绍一种使用netcat实现端口转发的方法。
@@ -18,9 +21,11 @@ yum install nmap-ncat -y
 ncat --sh-exec "ncat 192.168.172.131 80" -l 9876  --keep-open
 ```
 
+
 ## socat 端口转发
 
 socat是一个多功能的网络工具，使用socat进行端口转发。（实测：SSH端口转发可以正常工作）
+
 
 1. socat安装
 
@@ -28,8 +33,16 @@ socat是一个多功能的网络工具，使用socat进行端口转发。（实�
 yum install -y socat
 ```
 
+
 2. 在本地监听12345端口，并将请求转发至192.168.172.131的22端口。
 
 ```
 socat TCP4-LISTEN:12345,reuseaddr,fork TCP4:192.168.172.131:22
+```
+
+
+3. 仅在本地127.0.0.1网卡上监听12345端口，并将请求转发至192.168.172.131的22端口。
+
+```
+socat TCP4-LISTEN:12345,bind=127.0.0.1,reuseaddr,fork TCP4:192.168.172.131:22
 ```
