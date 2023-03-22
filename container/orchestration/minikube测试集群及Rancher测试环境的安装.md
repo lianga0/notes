@@ -110,8 +110,40 @@ kubectl port-forward service/rancher -n cattle-system 8443:443
 
 > 注意:安装过程中，K8S中很容易出现拉取镜像超时错误。目前做法是，登陆进去`gcr.io/k8s-minikube/kicbase:v0.0.33`镜像对应的容器中，在容器内修改docker源，并手动使用docker pull拉取失败镜像到本地。例如：`docker pull rancher/rancher:v2.5.11`
 
+
+## 在 Minikube 环境中使用 NGINX Ingress 控制器
+
+Minikube提供了许多插件，其中Ingress Controller插件可以使用Kong Ingress Controller或NGINX Ingress Controller。
+
+这里我们使用[NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/#minikube)，为了启用 NGINIX Ingress 控制器，可以运行下面的命令：
+
+```
+minikube addons enable ingress
+```
+
+使用`minikube tunnel`命令，从而使得可以直接从外部访问到虚拟集群中Ingress暴露的服务
+
+```
+# open another terminal window and run
+minikube tunnel
+
+# you may need to enter an admin password because minikube need to use ports 80 and 443 
+
+# test our ingress object
+curl -i localhost -H "Host: abc.test"
+```
+
+
+更多详细内容可以直接参考K8S文档[在 Minikube 环境中使用 NGINX Ingress 控制器配置 Ingress](https://kubernetes.io/zh-cn/docs/tasks/access-application-cluster/ingress-minikube/)或[NGINX Ingress Controller Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/#minikube)
+
 参考文档：
 
 [minikube start](https://minikube.sigs.k8s.io/docs/start/)
 
 [RANCHER 2.5 - Install/Upgrade Rancher on a Kubernetes Cluster](https://rancher.com/docs/rancher/v2.5/en/installation/install-rancher-on-k8s/)
+
+[在 Minikube 环境中使用 NGINX Ingress 控制器配置 Ingress](https://kubernetes.io/zh-cn/docs/tasks/access-application-cluster/ingress-minikube/)
+
+[Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
+
+[minikube Using Kong Ingress Controller Addon](https://minikube.sigs.k8s.io/docs/handbook/addons/kong-ingress/)
