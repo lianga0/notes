@@ -8,6 +8,7 @@
 |StarUML  |超好用的UML画图工具|
 |WirelessMon  |无线网络监控软件|
 |Doffen SSH Tunnel  |Widnows平台管理SSH会话和隧道。Manage hierarchy of ssh sessions and tunnels|
+|Sonatype Nexus Repository OSS | World’s #1 Repository Manager|
 
 
 
@@ -133,3 +134,11 @@ API接口在设计时往往需要编写大量的文档，而且编写完成后�
 作者：叮叮叮当
 链接：https://juejin.im/post/5ac31a2a6fb9a028d043a06d
 来源：掘金
+
+### [Nexus Repository OSS](https://www.sonatype.com/products/sonatype-nexus-oss-download)
+
+On-Demand Proxying, Grouping. Universal Repository Support. Private Hosted Repositories
+
+Manage your entire software supply chain. It's the world's first and only universal repository solution that's free to use.It's the world's first and only universal repository solution that's free to use.
+
+
