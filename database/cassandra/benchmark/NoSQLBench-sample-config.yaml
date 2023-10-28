@@ -1,0 +1,52 @@
+# ./nb5 run driver=cql workload=a.yaml tags=phase:schema threads=auto cycles=3 username=cassandra password=cassandra host=10.21.140.217  localdc=datacenter1
+# ./nb5 run driver=cql workload=a.yaml tags=phase:rampup threads=auto cycles=100 username=cassandra password=cassandra host=10.21.140.217  localdc=datacenter1
+# ./nb5 run driver=cql workload=a.yaml tags=phase:rampup threads=auto cycles=1000000 username=cassandra password=cassandra host=10.21.140.217  localdc=datacenter1 --report-csv-to summary --report-summary-to stdout:3,_SESSION_summary.txt
+# ./nb5 run driver=cql workload=a.yaml tags=phase:rampup threads=4 cycles=1000000 username=cassandra password=cassandra host=10.21.140.217  localdc=datacenter1 --report-csv-to summary --report-summary-to stdout:3,_SESSION_summary.txt
+description: |
+  This workload emulates a time-series data model and access patterns.
+blocks:
+  - tags:
+      phase: schema
+    params:
+      prepared: false
+    statements:
+     - create-keyspace: |
+        create keyspace if not exists mde_virus_db
+        WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}
+        AND durable_writes = true;
+     - create-table : |
+        create table if not exists mde_virus_db.md5_rules (
+              size varint,
+              md5 text,
+              result text,
+              PRIMARY KEY (size, md5)
+          ) WITH CLUSTERING ORDER BY (md5 ASC);
+#     - truncate-table: |
+#         truncate table mde_virus_db.md5_rules;
+  - tags:
+      phase: rampup
+    params:
+      cl: LOCAL_QUORUM
+    bindings:
+      size: AddHashRange(100, 2147483646);ModuloToBigInt() -> java.math.BigInteger
+      md5: HashedLineToString('md5.txt')
+      result: HashedLineToString('virus.txt')
+    statements:
+     - insert-rampup: |
+        insert into mde_virus_db.md5_rules
+        (size, md5, result)
+        values ({size}, {md5}, {result})
+       idempotent: true
+  - tags:
+      phase: main
+    params:
+      cl: LOCAL_QUORUM
+      prepared: true
+    bindings:
+      size: AddHashRange(100, 2147483646);ModuloToBigInt() -> java.math.BigInteger
+      md5: HashedLineToString('md5.txt')
+    statements:
+     - select-read: |
+         select * from baselines.iot
+         where machine_id={machine_id} and sensor_name={sensor_name}
+         limit 1;

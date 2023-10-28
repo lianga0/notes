@@ -1,0 +1,45 @@
+# /opt/bitnami/cassandra/tools/bin/cassandra-stress user profile=/tmp/tt.yaml no-warmup ops\(insert=1,get-a-value=1\) n=100 -node 127.0.0.1 -mode native cql3 user=cassandra password=cassandra -log level=verbose
+
+#
+# Keyspace name and create CQL
+#
+keyspace: mde_virus_db
+keyspace_definition: |
+  CREATE KEYSPACE mde_virus_db WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+#
+# Table name and create CQL
+#
+table: md5_rules
+table_definition: |
+  CREATE TABLE mde_virus_db.md5_rules (
+      size varint,
+      md5 text,
+      result text,
+      PRIMARY KEY (size, md5)
+  ) WITH CLUSTERING ORDER BY (md5 ASC)
+
+#
+# Meta information for generating data
+#
+columnspec:
+  - name: md5
+    size: fixed(32)
+  - name: result
+    size: uniform(10..20)
+
+
+#
+# Specs for insert queries
+#
+insert:
+  partitions: fixed(1)      # 1 partition per batch
+  batchtype: UNLOGGED       # use unlogged batches
+  select: fixed(10)/10      # no chance of skipping a row when generating inserts
+
+#
+# Read queries to run against the schema
+#
+queries:
+   get-a-value:
+      cql: select * from md5_rules where size = ? and md5 = ?
+      fields: samerow             # pick selection values from same row in partition
