@@ -1,0 +1,9 @@
+FROM spark-hadoop:latest
+
+ADD --chmod=a+x start_spark_history.sh /opt/
+
+COPY conf/* /opt/spark-3.3.2-bin-without-hadoop/conf/
+
+EXPOSE 18080
+
+CMD ["bash", "/opt/start_spark_history.sh"]

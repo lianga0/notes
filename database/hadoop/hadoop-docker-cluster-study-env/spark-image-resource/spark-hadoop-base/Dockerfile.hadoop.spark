@@ -1,0 +1,6 @@
+FROM hadoop-base:latest
+
+ADD spark-3.3.2-bin-without-hadoop.tgz /opt/
+
+COPY conf/* /opt/spark-3.3.2-bin-without-hadoop/conf/
+
