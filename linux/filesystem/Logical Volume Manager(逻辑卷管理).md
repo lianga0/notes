@@ -318,3 +318,28 @@ tmpfs                 16G     0   16G   0% /sys/fs/cgroup
 tmpfs                3.1G   12K  3.1G   1% /run/user/42
 tmpfs                3.1G     0  3.1G   0% /run/user/0
 ```
+
+
+### 删除失效的pv
+
+
+
+```
+vgdisplay
+  WARNING: Device for PV ljXZIV-7RI6-sxKi-Thyi-wOl3-dQWV-2c4iDB not found or rejected by a filter.
+  Couldn't find device with uuid ljXZIV-7RI6-sxKi-Thyi-wOl3-dQWV-2c4iDB.
+```
+
+删除vgdisplay命令中已经失效的pv命令
+
+```
+vgreduce --removemissing --force centos
+```
+
+
+### 减少硬盘《未验证》
+
+思路：用pvdisplay查看删除的硬盘的空间占用情况， 如果有文件占用硬盘，就用pvmove命令来操作,然后用vgreduce 减少物理卷
+
+操作：`pvmove /dev/sda2` 将数据移到剩余的LV空间里，然后 `vgreduce vg00 /dev/sdb`。将sdb移除空间。
+
