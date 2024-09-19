@@ -50,6 +50,7 @@ CPU0      11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  4              BFEBFBF
 7. 在管理员权限下，确保为允许选中远程启用。
 
 <img src="wmi_imgs/wmi控件-用户访问权限设置.png" alt="wmi控件-用户访问权限设置" />
+<img src="wmi_imgs/wmi控件-用户访问权限设置2.png" alt="wmi控件-用户访问权限设置2" />
 
 ### 添加“组件服务”访问权限
 
