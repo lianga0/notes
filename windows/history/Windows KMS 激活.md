@@ -1,6 +1,6 @@
 ## Windows KMS 激活
 
-### 一句命令激活windows/office
+### 一句命令激活windows
 
 一般来说，只要确保的下载的是VL批量版本并且没有手动安装过任何key，
 
@@ -24,6 +24,16 @@ slmgr /ato
 
 kms激活的前提是你的系统是批量授权版本，即VL版，一般企业版都是VL版，专业版有零售和VL版，家庭版旗舰版OEM版等等那就肯定不能默认直接用kms激活。
 
+
+### 一句命令激活office（2016）
+
+```
+cd \Program Files\Microsoft Office\Office16
+C:\Program Files\Microsoft Office\Office16>cscript ospp.vbs /sethst:kms.03k.org
+cscript ospp.vbs /act
+```
+
+
 ### KMS Server资源
 
 ##### myanaloglife/py-kms
@@ -43,3 +53,5 @@ https://github.com/lixuy/vlmcsd
 [2018年11月最新可用KMS激活服务器地址](https://blog.csdn.net/weixin_42588262/article/details/81120403)
 
 [本站上线KMS服务~一句命令激活windows/office](https://03k.org/kms.html)
+
+[用于基于 KMS 和 Active Directory 的 Office、Project 和 Visio 激活的 GVLK](https://learn.microsoft.com/zh-cn/office/volume-license-activation/gvlks?redirectedfrom=MSDN)
