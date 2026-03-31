@@ -18,6 +18,8 @@ Squid is a fully-featured HTTP/1.0 proxy which is almost (but not quite - we're 
 Squid offers a rich access control, authorization and logging environment to develop web proxy and content serving applications. 
 Squid offers a rich set of traffic optimization options, most of which are enabled by default for simpler installation and high performance.
 
+[Squid sources are released through GitHub](https://github.com/squid-cache/squid)
+
 
 ### [youtube-dl](https://github.com/ytdl-org/youtube-dl) download videos from youtube.com or other video platforms
 
